@@ -55,6 +55,7 @@
         "LLMOps"
     ],
     "main": "out/extension.js",
+    "activationEvents": [],
     "contributes": {
         "languages": [
             {
@@ -81,17 +82,18 @@
         ]
     },
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "vsce package"
     },
-    "dependencies": {},
     "devDependencies": {
-        "prettier": "^3.5.1",
-        "vscode": "^1.1.37",
         "@types/glob": "^8.1.0",
         "@types/mocha": "^10.0.10",
         "@vscode/test-electron": "^2.4.1",
         "glob": "^11.0.1",
         "mocha": "^11.1.0",
-        "typescript": "^5.7.3"
+        "prettier": "^3.5.1",
+        "typescript": "^5.7.3",
+        "vsce": "^2.15.0",
+        "vscode": "^1.1.37"
     }
 }

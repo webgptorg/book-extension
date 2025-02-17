@@ -1,5 +1,6 @@
-out
+
 node_modules
 
-.vscode-test
-# <- TODO: [🧠] Should be this folder ignored?
+# Ignore the build
+out
+*.vsix
