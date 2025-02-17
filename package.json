@@ -1,0 +1,97 @@
+{
+    "displayName": "Promptbook `.book` Language",
+    "name": "book-extension",
+    "version": "1.0.0",
+    "publisher": "Promptbook",
+    "description": "It's time for a paradigm shift. The future of software in plain English, French or Latin",
+    "author": "Pavol Hejný <pavol@ptbk.io> (https://www.pavolhejny.com/)",
+    "contributors": [
+        "Pavol Hejný <pavol@ptbk.io> (https://www.pavolhejny.com/)",
+        "Jiří Jahn <jiri@ptbk.io> (https://www.ptbk.io/)"
+    ],
+    "private": false,
+    "engines": {
+        "vscode": "^1.77.0"
+    },
+    "license": "BUSL-1.1",
+    "icon": "icon.png",
+    "galleryBanner": {
+        "color": "#007ACC",
+        "theme": "dark"
+    },
+    "preview": true,
+    "pricing": "Free",
+    "homepage": "https://ptbk.io/",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/webgptorg/book-extension"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "keywords": [
+        "ai",
+        "llm",
+        "prompt",
+        "template",
+        "language-model",
+        "chatgpt",
+        "autogpt",
+        "machine-learning",
+        "natural-language-processing",
+        "nlp",
+        "openai",
+        "o3",
+        "o3-mini",
+        "deepseek",
+        "gpt-3",
+        "gpt-4",
+        "gpt-4o",
+        "gpt-4o-mini",
+        "o1",
+        "o1-mini",
+        "o1-preview",
+        "anthropic",
+        "LLMOps"
+    ],
+    "main": "out/extension.js",
+    "contributes": {
+        "languages": [
+            {
+                "id": "book",
+                "aliases": [
+                    "Book",
+                    "BOOK"
+                ],
+                "extensions": [
+                    ".book",
+                    ".book.md",
+                    ".ptbk",
+                    ".ptbk.md"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "book",
+                "scopeName": "source.book",
+                "path": "./syntaxes/book.tmLanguage.json"
+            }
+        ]
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "prettier": "^3.5.1",
+        "vscode": "^1.1.37",
+        "@types/glob": "^8.1.0",
+        "@types/mocha": "^10.0.10",
+        "@vscode/test-electron": "^2.4.1",
+        "glob": "^11.0.1",
+        "mocha": "^11.1.0",
+        "typescript": "^5.7.3"
+    }
+}
