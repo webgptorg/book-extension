@@ -3,4 +3,5 @@ node_modules
 
 # Ignore the build
 out
-*.vsix
+# *.vsix
+# <- TODO: [🧠] Maybe also ignore the .vsix file?
