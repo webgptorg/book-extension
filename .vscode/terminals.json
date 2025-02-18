@@ -17,7 +17,7 @@
         },
         {
             "name": "🔼🩹 Release patch version",
-            "command": "npm version patch",
+            "commands": "npm version patch",
             "onlySingle": true,
             "focus": true
         }
