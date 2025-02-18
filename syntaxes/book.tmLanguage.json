@@ -1,6 +1,6 @@
 {
     "name": "Book Markdown",
-    "scopeName": "text.book.markdown",
+    "scopeName": "source.book",
     "fileTypes": ["book", "book.md"],
     "patterns": [
         {

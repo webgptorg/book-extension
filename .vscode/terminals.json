@@ -1,0 +1,25 @@
+{
+    "autokill": true,
+    "terminals": [
+        {
+            "name": "🏭 Build",
+            "command": "npm run build",
+            "execute": true,
+            "onlySingle": true,
+            "focus": true
+        },
+        {
+            "name": "🧪🏭 Build & Install the extension",
+            "commands": ["npm run build && code-insiders --install-extension book-extension-1.0.0.vsix"],
+            "execute": true,
+            "onlySingle": true,
+            "focus": true
+        },
+        {
+            "name": "🔼🩹 Release patch version",
+            "command": "npm version patch",
+            "onlySingle": true,
+            "focus": true
+        }
+    ]
+}

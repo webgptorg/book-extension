@@ -1,5 +1,7 @@
 # ![Promptbook logo](https://github.com/webgptorg/promptbook/raw/main/other/design/logo-h1.png) Promptbook `.book` language support
 
+> Nonce: 2
+
 <!--TODO: Add Badges, but be aware "SVGs are restricted in README.md; please use other file image formats, such as PNG: https://packagequality.com/shield/book.svg" -->
 
 <!--Import ./ABSTRACT.md-->
