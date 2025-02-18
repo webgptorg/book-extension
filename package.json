@@ -88,7 +88,7 @@
     "scripts": {
         "test": "echo \"TODO: Implement test\" && exit 0",
         "lint": "echo \"TODO: Implement lint\" && exit 0",
-        "build": "vsce package",
+        "build": "tsc && vsce package",
         "preversion": "git pull && npm run lint && npm test && echo \"TODO: tsc\"",
         "postversion": "git push && git push --tags"
     },
