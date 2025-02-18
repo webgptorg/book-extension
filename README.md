@@ -1,11 +1,16 @@
 # ![Promptbook logo](https://github.com/webgptorg/promptbook/raw/main/other/design/logo-h1.png) Promptbook `.book` language support
 
-> Nonce: 4
 
 <!--TODO: Add Badges, but be aware "SVGs are restricted in README.md; please use other file image formats, such as PNG: https://packagequality.com/shield/book.svg" -->
 
 <!--Import ./ABSTRACT.md-->
 <!--⚠️ WARNING: This section was imported, make changes in source; any manual changes here will be overwritten-->
+
+## 🔗 Links
+
+- [🆚 VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=promptbook.book-extension)
+- [📖 Github](https://github.com/webgptorg/promptbook/)
+- [✨ PTBK.io](https://ptbk.io/)
 
 ## 🤍 The Book Abstract
 
@@ -22,5 +27,11 @@ This shift is going to happen, whether we are ready for it or not. Our mission i
 **Join us in this journey!**
 
 <!--/Import ./ABSTRACT.md-->
+
+
+
+<!--
+https://marketplace.visualstudio.com/manage/publishers/promptbook
+-->
 
 <!-- TODO: !!! Make this better - specific README for book language extension -->
