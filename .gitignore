@@ -1,5 +1,8 @@
+.env
 
 node_modules
+
+
 
 # Ignore the build
 out
