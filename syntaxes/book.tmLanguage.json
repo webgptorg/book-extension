@@ -1,7 +1,7 @@
 {
     "name": "Book Markdown",
-    "scopeName": "source.book",
-    "fileTypes": ["book", "book.md"],
+    "scopeName": "text.book",
+    "fileTypes": ["book", "book.md", "ptbk", "ptbk.md"],
     "patterns": [
         {
             "include": "#blocks"
@@ -27,32 +27,38 @@
                 },
                 {
                     "include": "#lists"
+                },
+                {
+                    "include": "#comments"
+                },
+                {
+                    "include": "#commands"
                 }
             ]
         },
         "headers": {
             "patterns": [
                 {
-                    "name": "heading.1.markdown",
+                    "name": "heading.1.book",
                     "match": "^(#{1})\\s+(.*)$",
                     "captures": {
                         "1": {
-                            "name": "punctuation.definition.heading.markdown"
+                            "name": "punctuation.definition.heading.book"
                         },
                         "2": {
-                            "name": "entity.name.section.markdown"
+                            "name": "entity.name.section.book"
                         }
                     }
                 },
                 {
-                    "name": "heading.2.markdown",
+                    "name": "heading.2.book",
                     "match": "^(#{2})\\s+(.*)$",
                     "captures": {
                         "1": {
-                            "name": "punctuation.definition.heading.markdown"
+                            "name": "punctuation.definition.heading.book"
                         },
                         "2": {
-                            "name": "entity.name.section.markdown"
+                            "name": "entity.name.section.book"
                         }
                     }
                 }
@@ -61,41 +67,41 @@
         "inline": {
             "patterns": [
                 {
-                    "name": "markup.bold.markdown",
+                    "name": "markup.bold.book",
                     "match": "\\*\\*([^\\*]+)\\*\\*",
                     "captures": {
                         "1": {
-                            "name": "markup.bold.markdown"
+                            "name": "markup.bold.book"
                         }
                     }
                 },
                 {
-                    "name": "markup.italic.markdown",
+                    "name": "markup.italic.book",
                     "match": "\\*([^\\*]+)\\*",
                     "captures": {
                         "1": {
-                            "name": "markup.italic.markdown"
+                            "name": "markup.italic.book"
                         }
                     }
                 },
                 {
-                    "name": "markup.inline.raw.string.markdown",
+                    "name": "markup.inline.raw.string.book",
                     "match": "`([^`]+)`",
                     "captures": {
                         "1": {
-                            "name": "markup.inline.raw.string.markdown"
+                            "name": "markup.inline.raw.string.book"
                         }
                     }
                 },
                 {
-                    "name": "markup.underline.link.markdown",
+                    "name": "markup.underline.link.book",
                     "match": "\\[([^\\]]+)\\]\\(([^\\)]+)\\)",
                     "captures": {
                         "1": {
-                            "name": "string.other.link.title.markdown"
+                            "name": "string.other.link.title.book"
                         },
                         "2": {
-                            "name": "markup.underline.link.markdown"
+                            "name": "markup.underline.link.book"
                         }
                     }
                 }
@@ -104,33 +110,33 @@
         "lists": {
             "patterns": [
                 {
-                    "name": "markup.list.unnumbered.markdown",
+                    "name": "markup.list.unnumbered.book",
                     "match": "^\\s*([-*+])\\s+(.*)$",
                     "captures": {
                         "1": {
-                            "name": "punctuation.definition.list.markdown"
+                            "name": "punctuation.definition.list.book"
                         },
                         "2": {
-                            "name": "markup.list.item.markdown"
+                            "name": "markup.list.item.book"
                         }
                     }
                 },
                 {
-                    "name": "markup.list.numbered.markdown",
+                    "name": "markup.list.numbered.book",
                     "match": "^\\s*(\\d+\\.)\\s+(.*)$",
                     "captures": {
                         "1": {
-                            "name": "punctuation.definition.list.markdown"
+                            "name": "punctuation.definition.list.book"
                         },
                         "2": {
-                            "name": "markup.list.item.markdown"
+                            "name": "markup.list.item.book"
                         }
                     }
                 }
             ]
         },
         "blockquotes": {
-            "name": "markup.quote.markdown",
+            "name": "markup.quote.book",
             "begin": "^\\s*>\\s+",
             "end": "$",
             "patterns": [
@@ -140,7 +146,7 @@
             ]
         },
         "codeblocks": {
-            "name": "markup.fenced_code.block.markdown",
+            "name": "markup.fenced_code.block.book",
             "begin": "^\\s*(`{3,}|~{3,}).*$",
             "end": "^\\s*\\1\\s*$",
             "patterns": [
@@ -152,22 +158,44 @@
         "tables": {
             "patterns": [
                 {
-                    "name": "markup.table.markdown",
+                    "name": "markup.table.book",
                     "match": "^\\|(.+)\\|$",
                     "captures": {
                         "1": {
                             "patterns": [
                                 {
                                     "match": "[^|]+",
-                                    "name": "markup.table.cell.markdown"
+                                    "name": "markup.table.cell.book"
                                 }
                             ]
                         }
                     }
                 },
                 {
-                    "name": "markup.table.delimiter.markdown",
+                    "name": "markup.table.delimiter.book",
                     "match": "^\\|\\s*([-:]+[-| :]*?)\\s*\\|$"
+                }
+            ]
+        },
+        "comments": {
+            "patterns": [
+                {
+                    "name": "comment.block.book",
+                    "begin": "<!--",
+                    "end": "-->",
+                    "patterns": [
+                        {
+                            "include": "#inline"
+                        }
+                    ]
+                }
+            ]
+        },
+        "commands": {
+            "patterns": [
+                {
+                    "name": "keyword.command.formfactor.book",
+                    "match": "^\\s*FORMFACTOR\\s+.*$"
                 }
             ]
         }

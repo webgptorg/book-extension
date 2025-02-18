@@ -1,5 +1,5 @@
 {
-    "displayName": ".book Language",
+    "displayName": "Promptbook .book language support",
     "name": "book-extension",
     "version": "1.0.0",
     "publisher": "Promptbook",
@@ -80,7 +80,7 @@
         "grammars": [
             {
                 "language": "book",
-                "scopeName": "source.book",
+                "scopeName": "text.book",
                 "path": "./syntaxes/book.tmLanguage.json"
             }
         ]

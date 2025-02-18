@@ -1,6 +1,6 @@
 # ![Promptbook logo](https://github.com/webgptorg/promptbook/raw/main/other/design/logo-h1.png) Promptbook `.book` language support
 
-> Nonce: 2
+> Nonce: 3
 
 <!--TODO: Add Badges, but be aware "SVGs are restricted in README.md; please use other file image formats, such as PNG: https://packagequality.com/shield/book.svg" -->
 
@@ -22,6 +22,5 @@ This shift is going to happen, whether we are ready for it or not. Our mission i
 **Join us in this journey!**
 
 <!--/Import ./ABSTRACT.md-->
-
 
 <!-- TODO: !!! Make this better - specific README for book language extension -->
