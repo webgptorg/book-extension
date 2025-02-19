@@ -104,5 +104,15 @@
     },
     "dependencies": {
         "@vscode/vsce": "3.2.2"
-    }
+    },
+    "funding": [
+        {
+            "type": "individual",
+            "url": "https://buymeacoffee.com/hejny"
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/webgptorg/book-extension/blob/main/README.md#%EF%B8%8F-contributing"
+        }
+    ]
 }
