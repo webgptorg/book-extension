@@ -10,7 +10,7 @@
         },
         {
             "name": "🧪🏭 Build & Install the extension",
-            "commands": ["npm run build && code-insiders --install-extension book-extension-1.0.0.vsix"],
+            "commands": ["npm run build && code-insiders --install-extension book-extension.vsix"],
             "execute": true,
             "onlySingle": true,
             "focus": true

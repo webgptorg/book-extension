@@ -11,6 +11,7 @@
 - [🆚 VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=promptbook.book-extension)
 - [📖 Github](https://github.com/webgptorg/promptbook/)
 - [✨ PTBK.io](https://ptbk.io/)
+- 😎
 
 ## 🤍 The Book Abstract
 
