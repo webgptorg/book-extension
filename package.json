@@ -93,16 +93,16 @@
         "postversion": "git push && git push --tags"
     },
     "devDependencies": {
-        "@types/glob": "^8.1.0",
-        "@types/mocha": "^10.0.10",
-        "@vscode/test-electron": "^2.4.1",
-        "glob": "^11.0.1",
-        "mocha": "^11.1.0",
-        "prettier": "^3.5.1",
-        "typescript": "^5.7.3",
-        "vscode": "^1.1.37"
+        "@types/glob": "8.1.0",
+        "@types/mocha": "10.0.10",
+        "@vscode/test-electron": "2.4.1",
+        "glob": "11.0.1",
+        "mocha": "11.1.0",
+        "prettier": "3.5.1",
+        "typescript": "5.7.3",
+        "vscode": "1.1.37"
     },
     "dependencies": {
-        "@vscode/vsce": "^3.2.2"
+        "@vscode/vsce": "3.2.2"
     }
 }
