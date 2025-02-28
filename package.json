@@ -75,6 +75,20 @@
                     "light": "./icon.png",
                     "dark": "./icon.png"
                 }
+            },
+            {
+                "id": "bookc",
+                "aliases": [
+                    "BookC",
+                    "BOOKC"
+                ],
+                "extensions": [
+                    ".bookc"
+                ],
+                "icon": {
+                    "light": "./icon.png",
+                    "dark": "./icon.png"
+                }
             }
         ],
         "grammars": [
@@ -82,6 +96,18 @@
                 "language": "book",
                 "scopeName": "text.book",
                 "path": "./syntaxes/book.tmLanguage.json"
+            }
+        ],
+        "customEditors": [
+            {
+                "viewType": "bookc.preview",
+                "displayName": "BookC Preview",
+                "selector": [
+                    {
+                        "filenamePattern": "*.bookc"
+                    }
+                ],
+                "priority": "default"
             }
         ]
     },
