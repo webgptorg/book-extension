@@ -3,7 +3,7 @@
     "name": "book-extension",
     "version": "1.0.12",
     "publisher": "Promptbook",
-    "description": "",
+    "description": "!!!",
     "author": "Pavol Hejný <pavol@ptbk.io> (https://www.pavolhejny.com/)",
     "contributors": [
         "Pavol Hejný <pavol@ptbk.io> (https://www.pavolhejny.com/)",
@@ -55,7 +55,9 @@
         "LLMOps"
     ],
     "main": "out/extension.js",
-    "activationEvents": [],
+    "activationEvents": [
+        "onLanguage:bookc"
+    ],
     "contributes": {
         "languages": [
             {
