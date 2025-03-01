@@ -4,7 +4,7 @@ import * as fs from 'fs';
 
 
 
-// Define our own interfaces since the VS Code API version might not include these
+// Define our own interfaces since the VSCode API version might not include these
 interface CustomDocument {
     uri: vscode.Uri;
     dispose(): void;
@@ -23,13 +23,13 @@ interface CustomEditorProvider {
 export function activate(context: vscode.ExtensionContext) {
 
 
-    // TODO: !!!!!! Cleanup
-    // Create output channel for better visibility
+
+
     const outputChannel = vscode.window.createOutputChannel('Promptbook');
     outputChannel.show(true); // Show the channel in the Output panel
+    // <- TODO: !!!!!! Chamge to false
 
-    outputChannel.appendLine('Promptbook extension activated!');
-    outputChannel.appendLine('🦌');
+    outputChannel.appendLine('✨ Promptbook');
 
 
     // Show notification to make activation more visible
@@ -69,15 +69,22 @@ export function activate(context: vscode.ExtensionContext) {
 
     // Use registerTextEditorViewColumn as a fallback since registerCustomEditor might not exist
     try {
-        // @ts-ignore - Using VS Code API that might not be in the typings
+        // @ts-ignore - Using VSCode API that might not be in the typings
         context.subscriptions.push(vscode.window.registerCustomEditor('bookc.preview', bookcEditorProvider));
-    } catch (e) {
-        // Alternative registration for older VS Code versions
+    } catch (error) {
+
+        if(!(error instanceof Error)){
+            throw error;
+        }
+
+        // Alternative registration for older VSCode versions
+        outputChannel.appendLine(`Alternative registration for older VSCode versions`);
+        outputChannel.appendLine(error.message);
         context.subscriptions.push(
             vscode.workspace.registerTextDocumentContentProvider('bookc.preview', {
                 provideTextDocumentContent(_uri: vscode.Uri): string {
-                    // Return a simple placeholder for older VS Code versions
-                    return "Book Preview not available in this VS Code version. Please update VS Code.";
+                    // Return a simple placeholder for older VSCode versions
+                    return "Book Preview not available in this VSCode version. Please update VSCode.";
                 }
             })
         );
@@ -114,7 +121,7 @@ export function activate(context: vscode.ExtensionContext) {
     }
 
 
-    outputChannel.appendLine('Book Markdown extension is now active');
+    outputChannel.appendLine('`.book` extension is now active');
 }
 
 /**
@@ -191,17 +198,19 @@ class BookcEditorProvider implements CustomEditorProvider {
                     // Try to parse as JSON
                     jsonData = JSON.parse(fileContent);
                     isValidJson = true;
-                } catch (e) {
+                } catch (error) {
                     // Type-safe error handling
-                    const jsonError = e as Error;
+                    const jsonError = error as Error;
                     fileContent = `Error parsing JSON: ${jsonError.message || 'Unknown error'}\n\nRaw content:\n${fileContent.substring(0, 500)}${fileContent.length > 500 ? '...' : ''}`;
                 }
             } else {
                 fileContent = "Not a .bookc file";
             }
-        } catch (e) {
-            // Type-safe error handling
-            const error = e as Error;
+        } catch (error) {
+            if(!(error instanceof Error)){
+              throw error;
+            }
+
             fileContent = `Error reading file: ${error.message || 'Unknown error'}`;
         }
 
@@ -301,7 +310,7 @@ class BookcEditorProvider implements CustomEditorProvider {
                 (function() {
                     const vscode = acquireVsCodeApi();
 
-                    // Report any errors to VS Code
+                    // Report any errors to VSCode
                     window.onerror = function(message, source, line, column, error) {
                         vscode.postMessage({
                             command: 'alert',
