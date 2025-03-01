@@ -65,12 +65,12 @@ export function activate(context: vscode.ExtensionContext) {
 
 
     // Register Bookc custom editor provider
-    const bookCEditorProvider = new BookcEditorProvider(outputChannel,context.extensionPath);
+    const bookcEditorProvider = new BookcEditorProvider(outputChannel,context.extensionPath);
 
     // Use registerTextEditorViewColumn as a fallback since registerCustomEditor might not exist
     try {
         // @ts-ignore - Using VS Code API that might not be in the typings
-        context.subscriptions.push(vscode.window.registerCustomEditor('bookc.preview', bookCEditorProvider));
+        context.subscriptions.push(vscode.window.registerCustomEditor('bookc.preview', bookcEditorProvider));
     } catch (e) {
         // Alternative registration for older VS Code versions
         context.subscriptions.push(
@@ -85,8 +85,12 @@ export function activate(context: vscode.ExtensionContext) {
         // Add command to open the preview
         context.subscriptions.push(
             vscode.commands.registerCommand('bookc.openPreview', async () => {
+
+                outputChannel.appendLine(`bookc.openPreview command invoked`);
+
                 const editor = vscode.window.activeTextEditor;
                 if (!editor) {
+                    outputChannel.appendLine(`No active editor found`);
                     return;
                 }
 
@@ -100,7 +104,7 @@ export function activate(context: vscode.ExtensionContext) {
                     }
                 );
 
-                await bookCEditorProvider.resolveCustomEditor(
+                await bookcEditorProvider.resolveCustomEditor(
                   {
                     uri: editor.document.uri,
                     dispose: () => {}
@@ -121,7 +125,10 @@ class BookcEditorProvider implements CustomEditorProvider {
     constructor(
         private readonly outputChannel: vscode.OutputChannel,
         private readonly extensionPath: string
-    ) { }
+    ) {
+      this.outputChannel.appendLine(`BookcEditorProvider.constructor`);
+
+    }
 
     // Required for CustomEditorProvider interface
     onDidChangeCustomDocument = new vscode.EventEmitter<CustomDocumentEditEvent>().event;
@@ -148,11 +155,12 @@ class BookcEditorProvider implements CustomEditorProvider {
             localResourceRoots: [vscode.Uri.file(this.extensionPath)]
         };
 
-        this.outputChannel.appendLine(`Test book-extension ptbk`)
+        this.outputChannel.appendLine(`Test book-extension ptbk`);
 
         // Set webview HTML content
         console.log('!!! keepUnused',document,this.getHtmlForWebview)
-        webviewPanel.webview.html = `Testing content of bookc preview !!! `;// await this.getHtmlForWebview(document.uri, webviewPanel.webview);
+        // webviewPanel.webview.html = `Testing content of bookc preview !!! `;
+        await this.getHtmlForWebview(document.uri, webviewPanel.webview);
 
         // Handle messages from the webview
         webviewPanel.webview.onDidReceiveMessage(message => {
