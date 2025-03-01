@@ -14,7 +14,7 @@
         "vscode": "^1.77.0"
     },
     "license": "BUSL-1.1",
-    "icon": "icon.png",
+    "icon": "./icons/book-icon.png",
     "galleryBanner": {
         "color": "#007ACC",
         "theme": "dark"
@@ -73,7 +73,8 @@
                 "configuration": "./language-configuration.json",
                 "icon": {
                     "light": "./icons/book-icon.png",
-                    "dark": "./icons/book-icon.png"
+                    "dark": "./icons/book-icon.png",
+                    "--1": "<- TODO: Make distinct icons for dark/light"
                 }
             },
             {
@@ -87,7 +88,9 @@
                 ],
                 "icon": {
                     "light": "./icons/bookc-icon.png",
-                    "dark": "./icons/bookc-icon.png"
+                    "dark": "./icons/bookc-icon.png",
+                    "--1": "<- TODO: Make distinct icons for dark/light",
+                    "--2": "<- TODO: Put this into SVG design scheme"
                 }
             }
         ],
