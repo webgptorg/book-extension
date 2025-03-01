@@ -1,8 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
-
-
+import JSZip from 'jszip';
 
 // Define our own interfaces since the VSCode API version might not include these
 interface CustomDocument {
@@ -26,14 +25,14 @@ export function activate(context: vscode.ExtensionContext) {
 
 
     const outputChannel = vscode.window.createOutputChannel('Promptbook');
-    outputChannel.show(true); // Show the channel in the Output panel
-    // <- TODO: !!!!!! Chamge to false
+    outputChannel.show(false); // Show the channel in the Output panel
+
 
     outputChannel.appendLine('✨ Promptbook');
 
 
     // Show notification to make activation more visible
-    vscode.window.showInformationMessage('Promptbook [extension](https://ptbk.io/) activated!');
+    vscode.window.showInformationMessage('Promptbook [extension](https://ptbk.io/) activated !!!');
 
 
     // Register document selectors for our custom language IDs
@@ -180,28 +179,60 @@ class BookcEditorProvider implements CustomEditorProvider {
     }
 
     private async getHtmlForWebview(fileUri: vscode.Uri, _webview: vscode.Webview): Promise<string> {
+
+
         const fileName = path.basename(fileUri.fsPath);
 
         // Try to read and parse the .bookc file
         let fileContent = "Unable to read file content";
-        let isValidJson = false;
+        let isValid = false;
         let jsonData = {};
+        let title = 'Compiled Book Preview';
+
+        // TODO: !!! Preview metadata
+        // TODO: !!! Preview tasks, personas, and knowledge
 
         try {
             // Check if the file has a .bookc extension
             if (fileUri.fsPath.endsWith('.bookc')) {
-                // For now, we'll just read the file as text, in the future
-                // you might want to handle ZIP format properly
-                fileContent = fs.readFileSync(fileUri.fsPath, 'utf-8');
+
+
+                // Read file as binary data for zip processing
+                const fileBuffer = fs.readFileSync(fileUri.fsPath);
+
 
                 try {
-                    // Try to parse as JSON
-                    jsonData = JSON.parse(fileContent);
-                    isValidJson = true;
+                    // Load the zip file
+                    const zip = new JSZip();
+                    const zipContent = await zip.loadAsync(fileBuffer);
+
+
+                    // Extract the index.book.json file from the zip
+                    const indexFile = zipContent.file('index.book.json');
+
+                    if (indexFile) {
+                        // Get the content of the index file
+                        fileContent = await indexFile.async('string');
+
+
+                        try {
+                            // Try to parse as JSON
+                            jsonData = JSON.parse(fileContent);
+                            isValid = true;
+                            title = (jsonData as any)[0].title;
+                        } catch (error) {
+                            // Type-safe error handling
+                            const jsonError = error as Error;
+                            fileContent = `Error parsing JSON: ${jsonError.message || 'Unknown error'}\n\nRaw content:\n${fileContent.substring(0, 500)}${fileContent.length > 500 ? '...' : ''}`;
+                        }
+                    } else {
+                        fileContent = "No 'index.book.json' file found in the .bookc archive";
+                    }
                 } catch (error) {
-                    // Type-safe error handling
-                    const jsonError = error as Error;
-                    fileContent = `Error parsing JSON: ${jsonError.message || 'Unknown error'}\n\nRaw content:\n${fileContent.substring(0, 500)}${fileContent.length > 500 ? '...' : ''}`;
+                    if(!(error instanceof Error)){
+                      throw error;
+                    }
+                    fileContent = `Error extracting ZIP content: ${error.message || 'Unknown error'}\n\nThis .bookc file may not be a valid ZIP archive.`;
                 }
             } else {
                 fileContent = "Not a .bookc file";
@@ -220,7 +251,7 @@ class BookcEditorProvider implements CustomEditorProvider {
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Compiled Book Preview</title>
+                <title>${title}</title>
                 <style>
                     body {
                         font-family: Arial, sans-serif;
@@ -244,7 +275,7 @@ class BookcEditorProvider implements CustomEditorProvider {
                     }
                     .info-box {
                         background-color: var(--vscode-editor-inactiveSelectionBackground);
-                        border-left: 4px solid #d33;
+                        border-left: 4px solid ${isValid?'#38f':'#d33'};
                         padding: 15px;
                         margin-bottom: 20px;
                         border-radius: 2px;
@@ -281,7 +312,7 @@ class BookcEditorProvider implements CustomEditorProvider {
             </head>
             <body>
                 <div class="container">
-                    <h1>Compiled Book File Viewer</h1>
+                    <h1>${title}</h1>
 
                     <div class="info-box">
                         <p><strong>This is a compiled Book file (.bookc)</strong></p>
@@ -291,10 +322,10 @@ class BookcEditorProvider implements CustomEditorProvider {
 
                     <div class="file-info">
                         <p><strong>File:</strong> ${fileName}</p>
-                        <p><strong>Format:</strong> JSON ${isValidJson ? '(Valid)' : '(Invalid or not JSON)'}</p>
+                        <p><strong>Format:</strong> JSON ${isValid ? '(Valid)' : '(Invalid or not JSON)'}</p>
                     </div>
 
-                    ${isValidJson ? `
+                    ${isValid ? `
                     <h2>File Content:</h2>
                     <div class="json-view">${this.formatJsonForDisplay(jsonData)}</div>
                     ` : `
@@ -331,6 +362,8 @@ class BookcEditorProvider implements CustomEditorProvider {
         const formatted = JSON.stringify(json, null, 2);
         // Simple syntax highlighting with regex
         return formatted
+            /*
+            TODO:
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;')
@@ -339,7 +372,15 @@ class BookcEditorProvider implements CustomEditorProvider {
             .replace(/\b(true|false)\b/g, '<span class="json-boolean">$1</span>')
             .replace(/\b(null)\b/g, '<span class="json-null">$1</span>')
             .replace(/\b(\d+(\.\d+)?)\b/g, '<span class="json-number">$1</span>');
+            */
     }
 }
 
-export function deactivate() {}
+export function deactivate() {
+  // TODO: Implement cleanup logic here
+}
+
+
+/**
+ * TODO: Avoid callback hell - use fail-fast approach
+ */

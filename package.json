@@ -134,7 +134,8 @@
         "vscode": "1.1.37"
     },
     "dependencies": {
-        "@vscode/vsce": "3.2.2"
+        "@vscode/vsce": "3.2.2",
+        "jszip": "3.10.1"
     },
     "funding": [
         {
