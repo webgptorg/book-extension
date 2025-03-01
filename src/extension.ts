@@ -2,6 +2,8 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 
+
+
 // Define our own interfaces since the VS Code API version might not include these
 interface CustomDocument {
     uri: vscode.Uri;
@@ -19,9 +21,23 @@ interface CustomEditorProvider {
 }
 
 export function activate(context: vscode.ExtensionContext) {
+
+
+    // TODO: !!!!!! Cleanup
+    // Create output channel for better visibility
+    const outputChannel = vscode.window.createOutputChannel('Promptbook');
+    outputChannel.show(true); // Show the channel in the Output panel
+
+    outputChannel.appendLine('Promptbook extension activated!');
+    outputChannel.appendLine('🦌');
+
+
+    // Show notification to make activation more visible
+    vscode.window.showInformationMessage('Promptbook [extension](https://ptbk.io/) activated!');
+
+
     // Register document selectors for our custom language IDs
     const bookSelector: vscode.DocumentSelector = { language: 'book', scheme: 'file' };
-    const bookMdSelector: vscode.DocumentSelector = { language: 'book-md', scheme: 'file' };
 
     // Register the language configuration for both file types
     if (bookSelector.language) {
@@ -46,31 +62,11 @@ export function activate(context: vscode.ExtensionContext) {
         );
     }
 
-    if (bookMdSelector.language) {
-        context.subscriptions.push(
-            vscode.languages.setLanguageConfiguration(bookMdSelector.language, {
-                wordPattern: /(-?\d*\.\d\w*)|([^\`\~\!\@\#\%\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\?\s]+)/g,
-                comments: {
-                    blockComment: ['<!--', '-->']
-                },
-                brackets: [
-                    ['{', '}'],
-                    ['[', ']'],
-                    ['(', ')']
-                ],
-                onEnterRules: [
-                    {
-                        beforeText: /^\s*(?:[-*+]|\d+\.)\s+(?=.)/, // For lists
-                        action: { indentAction: vscode.IndentAction.None, appendText: '' }
-                    }
-                ]
-            })
-        );
-    }
 
-    // Register BookC custom editor provider
-    const bookCEditorProvider = new BookCEditorProvider(context.extensionPath);
-    
+
+    // Register Bookc custom editor provider
+    const bookCEditorProvider = new BookcEditorProvider(outputChannel,context.extensionPath);
+
     // Use registerTextEditorViewColumn as a fallback since registerCustomEditor might not exist
     try {
         // @ts-ignore - Using VS Code API that might not be in the typings
@@ -81,7 +77,7 @@ export function activate(context: vscode.ExtensionContext) {
             vscode.workspace.registerTextDocumentContentProvider('bookc.preview', {
                 provideTextDocumentContent(_uri: vscode.Uri): string {
                     // Return a simple placeholder for older VS Code versions
-                    return "BookC Preview not available in this VS Code version. Please update VS Code.";
+                    return "Book Preview not available in this VS Code version. Please update VS Code.";
                 }
             })
         );
@@ -93,7 +89,7 @@ export function activate(context: vscode.ExtensionContext) {
                 if (!editor) {
                     return;
                 }
-                
+
                 const panel = vscode.window.createWebviewPanel(
                     'bookc.preview',
                     'BookC Preview',
@@ -103,8 +99,9 @@ export function activate(context: vscode.ExtensionContext) {
                         localResourceRoots: [vscode.Uri.file(context.extensionPath)]
                     }
                 );
-                
-                await bookCEditorProvider.resolveCustomEditor({
+
+                await bookCEditorProvider.resolveCustomEditor(
+                  {
                     uri: editor.document.uri,
                     dispose: () => {}
                 }, panel, new vscode.CancellationTokenSource().token);
@@ -112,16 +109,17 @@ export function activate(context: vscode.ExtensionContext) {
         );
     }
 
-    // Log activation
-    console.log('Book Markdown extension is now active');
+
+    outputChannel.appendLine('Book Markdown extension is now active');
 }
 
 /**
- * Provider for BookC file format - a compiled version of .book files
+ * Provider for Bookc file format - a compiled version of .book files
  * This is a JSON in ZIP format that should be viewed, not edited directly
  */
-class BookCEditorProvider implements CustomEditorProvider {
+class BookcEditorProvider implements CustomEditorProvider {
     constructor(
+        private readonly outputChannel: vscode.OutputChannel,
         private readonly extensionPath: string
     ) { }
 
@@ -134,7 +132,7 @@ class BookCEditorProvider implements CustomEditorProvider {
         _openContext: { backupId?: string },
         _token: vscode.CancellationToken
     ): Promise<CustomDocument> {
-        return { 
+        return {
             uri,
             dispose: () => {}
         };
@@ -149,10 +147,13 @@ class BookCEditorProvider implements CustomEditorProvider {
             enableScripts: true,
             localResourceRoots: [vscode.Uri.file(this.extensionPath)]
         };
-        
+
+        this.outputChannel.appendLine(`Test book-extension ptbk`)
+
         // Set webview HTML content
-        webviewPanel.webview.html = await this.getHtmlForWebview(document.uri, webviewPanel.webview);
-        
+        console.log('!!! keepUnused',document,this.getHtmlForWebview)
+        webviewPanel.webview.html = `Testing content of bookc preview !!! `;// await this.getHtmlForWebview(document.uri, webviewPanel.webview);
+
         // Handle messages from the webview
         webviewPanel.webview.onDidReceiveMessage(message => {
             switch (message.command) {
@@ -165,19 +166,19 @@ class BookCEditorProvider implements CustomEditorProvider {
 
     private async getHtmlForWebview(fileUri: vscode.Uri, _webview: vscode.Webview): Promise<string> {
         const fileName = path.basename(fileUri.fsPath);
-        
+
         // Try to read and parse the .bookc file
         let fileContent = "Unable to read file content";
         let isValidJson = false;
         let jsonData = {};
-        
+
         try {
             // Check if the file has a .bookc extension
             if (fileUri.fsPath.endsWith('.bookc')) {
                 // For now, we'll just read the file as text, in the future
                 // you might want to handle ZIP format properly
                 fileContent = fs.readFileSync(fileUri.fsPath, 'utf-8');
-                
+
                 try {
                     // Try to parse as JSON
                     jsonData = JSON.parse(fileContent);
@@ -195,14 +196,14 @@ class BookCEditorProvider implements CustomEditorProvider {
             const error = e as Error;
             fileContent = `Error reading file: ${error.message || 'Unknown error'}`;
         }
-        
+
         return `
         <!DOCTYPE html>
         <html lang="en">
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>BookC Preview</title>
+            <title>Compiled Book Preview</title>
             <style>
                 body {
                     font-family: Arial, sans-serif;
@@ -263,19 +264,19 @@ class BookCEditorProvider implements CustomEditorProvider {
         </head>
         <body>
             <div class="container">
-                <h1>BookC File Viewer</h1>
-                
+                <h1>Compiled Book File Viewer</h1>
+
                 <div class="info-box">
-                    <p><strong>This is a compiled BookC file (.bookc)</strong></p>
+                    <p><strong>This is a compiled Book file (.bookc)</strong></p>
                     <p>A .bookc file is a compiled version of a .book file containing JSON data in a compressed ZIP format.</p>
                     <p>This file is intended for consumption by tools and should not be edited directly.</p>
                 </div>
-                
+
                 <div class="file-info">
                     <p><strong>File:</strong> ${fileName}</p>
                     <p><strong>Format:</strong> JSON ${isValidJson ? '(Valid)' : '(Invalid or not JSON)'}</p>
                 </div>
-                
+
                 ${isValidJson ? `
                 <h2>File Content:</h2>
                 <div class="json-view">${this.formatJsonForDisplay(jsonData)}</div>
@@ -283,7 +284,7 @@ class BookCEditorProvider implements CustomEditorProvider {
                 <h2>File Content:</h2>
                 <div class="json-view">${fileContent}</div>
                 `}
-                
+
                 <p>If you need to make changes to this file, you should edit the original <span class="code">.book</span> source file and recompile it.</p>
             </div>
 
@@ -291,7 +292,7 @@ class BookCEditorProvider implements CustomEditorProvider {
                 // Script for webview interaction
                 (function() {
                     const vscode = acquireVsCodeApi();
-                    
+
                     // Report any errors to VS Code
                     window.onerror = function(message, source, line, column, error) {
                         vscode.postMessage({
