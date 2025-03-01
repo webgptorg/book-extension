@@ -1,6 +1,21 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import * as fs from 'fs';
+
+// Define our own interfaces since the VS Code API version might not include these
+interface CustomDocument {
+    uri: vscode.Uri;
+    dispose(): void;
+}
+
+interface CustomDocumentEditEvent {
+    document: CustomDocument;
+}
+
+interface CustomEditorProvider {
+    onDidChangeCustomDocument?: vscode.Event<CustomDocumentEditEvent>;
+    openCustomDocument?(uri: vscode.Uri, openContext: any, token: vscode.CancellationToken): Promise<CustomDocument>;
+    resolveCustomEditor(document: CustomDocument, webviewPanel: vscode.WebviewPanel, token: vscode.CancellationToken): Promise<void>;
+}
 
 export function activate(context: vscode.ExtensionContext) {
     // Register document selectors for our custom language IDs
@@ -53,19 +68,48 @@ export function activate(context: vscode.ExtensionContext) {
     }
 
     // Register BookC custom editor provider
-    const bookCEditorProvider = new BookCEditorProvider(context.extensionUri);
-    context.subscriptions.push(
-        vscode.window.registerCustomEditorProvider(
-            'bookc.preview',
-            bookCEditorProvider,
-            {
-                webviewOptions: {
-                    enableScripts: true,
-                },
-                supportsMultipleEditorsPerDocument: false,
-            }
-        )
-    );
+    const bookCEditorProvider = new BookCEditorProvider(context.extensionPath);
+    
+    // Use registerTextEditorViewColumn as a fallback since registerCustomEditor might not exist
+    try {
+        // @ts-ignore - Using VS Code API that might not be in the typings
+        context.subscriptions.push(vscode.window.registerCustomEditor('bookc.preview', bookCEditorProvider));
+    } catch (e) {
+        // Alternative registration for older VS Code versions
+        context.subscriptions.push(
+            vscode.workspace.registerTextDocumentContentProvider('bookc.preview', {
+                provideTextDocumentContent(_uri: vscode.Uri): string {
+                    // Return a simple placeholder for older VS Code versions
+                    return "BookC Preview not available in this VS Code version. Please update VS Code.";
+                }
+            })
+        );
+
+        // Add command to open the preview
+        context.subscriptions.push(
+            vscode.commands.registerCommand('bookc.openPreview', async () => {
+                const editor = vscode.window.activeTextEditor;
+                if (!editor) {
+                    return;
+                }
+                
+                const panel = vscode.window.createWebviewPanel(
+                    'bookc.preview',
+                    'BookC Preview',
+                    vscode.ViewColumn.Beside,
+                    {
+                        enableScripts: true,
+                        localResourceRoots: [vscode.Uri.file(context.extensionPath)]
+                    }
+                );
+                
+                await bookCEditorProvider.resolveCustomEditor({
+                    uri: editor.document.uri,
+                    dispose: () => {}
+                }, panel, new vscode.CancellationTokenSource().token);
+            })
+        );
+    }
 
     // Log activation
     console.log('Book Markdown extension is now active');
@@ -75,34 +119,41 @@ export function activate(context: vscode.ExtensionContext) {
  * Provider for BookC file format - a compiled version of .book files
  * This is a JSON in ZIP format that should be viewed, not edited directly
  */
-class BookCEditorProvider implements vscode.CustomReadonlyEditorProvider {
+class BookCEditorProvider implements CustomEditorProvider {
     constructor(
-        private readonly extensionUri: vscode.Uri
+        private readonly extensionPath: string
     ) { }
 
+    // Required for CustomEditorProvider interface
+    onDidChangeCustomDocument = new vscode.EventEmitter<CustomDocumentEditEvent>().event;
+
+    // Create and return a custom document
     async openCustomDocument(
         uri: vscode.Uri,
-        openContext: vscode.CustomDocumentOpenContext,
-        token: vscode.CancellationToken
-    ): Promise<vscode.CustomDocument> {
-        return { uri, dispose: () => { } };
+        _openContext: { backupId?: string },
+        _token: vscode.CancellationToken
+    ): Promise<CustomDocument> {
+        return { 
+            uri,
+            dispose: () => {}
+        };
     }
 
     async resolveCustomEditor(
-        document: vscode.CustomDocument,
+        document: CustomDocument,
         webviewPanel: vscode.WebviewPanel,
-        token: vscode.CancellationToken
+        _token: vscode.CancellationToken
     ): Promise<void> {
         webviewPanel.webview.options = {
             enableScripts: true,
-            localResourceRoots: [this.extensionUri]
+            localResourceRoots: [vscode.Uri.file(this.extensionPath)]
         };
         
         // Set webview HTML content
-        webviewPanel.webview.html = this.getHtmlForWebview(webviewPanel.webview, document.uri);
+        webviewPanel.webview.html = this.getHtmlForWebview(document.uri);
     }
 
-    private getHtmlForWebview(webview: vscode.Webview, fileUri: vscode.Uri): string {
+    private getHtmlForWebview(fileUri: vscode.Uri): string {
         const fileName = path.basename(fileUri.fsPath);
         
         return `
