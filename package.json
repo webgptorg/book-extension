@@ -72,8 +72,8 @@
                 ],
                 "configuration": "./language-configuration.json",
                 "icon": {
-                    "light": "./icon.png",
-                    "dark": "./icon.png"
+                    "light": "./icons/book-icon.png",
+                    "dark": "./icons/book-icon.png"
                 }
             },
             {
@@ -86,8 +86,8 @@
                     ".bookc"
                 ],
                 "icon": {
-                    "light": "./icon.png",
-                    "dark": "./icon.png"
+                    "light": "./icons/bookc-icon.png",
+                    "dark": "./icons/bookc-icon.png"
                 }
             }
         ],
