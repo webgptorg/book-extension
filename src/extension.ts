@@ -79,7 +79,7 @@ export function activate(context: vscode.ExtensionContext) {
 
         // Alternative registration for older VSCode versions
         outputChannel.appendLine(`Alternative registration for older VSCode versions`);
-        outputChannel.appendLine(error.message);
+        outputChannel.appendLine(error.stack || error.message);
         context.subscriptions.push(
             vscode.workspace.registerTextDocumentContentProvider('bookc.preview', {
                 provideTextDocumentContent(_uri: vscode.Uri): string {
