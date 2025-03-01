@@ -70,7 +70,7 @@ export function activate(context: vscode.ExtensionContext) {
     // Use registerTextEditorViewColumn as a fallback since registerCustomEditor might not exist
     try {
         // @ts-ignore - Using VSCode API that might not be in the typings
-        context.subscriptions.push(vscode.window.registerCustomEditor('bookc.preview', bookcEditorProvider));
+        context.subscriptions.push(vscode.window.registerCustomEditorProvider('bookc.preview', bookcEditorProvider));
     } catch (error) {
 
         if(!(error instanceof Error)){
@@ -165,9 +165,9 @@ class BookcEditorProvider implements CustomEditorProvider {
         this.outputChannel.appendLine(`Test book-extension ptbk`);
 
         // Set webview HTML content
-        console.log('!!! keepUnused',document,this.getHtmlForWebview)
+        // console.log('!!! keepUnused',document,this.getHtmlForWebview)
         // webviewPanel.webview.html = `Testing content of bookc preview !!! `;
-        await this.getHtmlForWebview(document.uri, webviewPanel.webview);
+        webviewPanel.webview.html = await this.getHtmlForWebview(document.uri, webviewPanel.webview);
 
         // Handle messages from the webview
         webviewPanel.webview.onDidReceiveMessage(message => {
@@ -215,112 +215,112 @@ class BookcEditorProvider implements CustomEditorProvider {
         }
 
         return `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Compiled Book Preview</title>
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                    margin: 0;
-                    padding: 20px;
-                    color: var(--vscode-editor-foreground);
-                    background-color: var(--vscode-editor-background);
-                }
-                .container {
-                    max-width: 800px;
-                    margin: 0 auto;
-                    padding: 20px;
-                    background-color: var(--vscode-editor-background);
-                    border-radius: 4px;
-                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                }
-                h1 {
-                    color: var(--vscode-editor-foreground);
-                    margin-bottom: 20px;
-                    font-size: 24px;
-                }
-                .info-box {
-                    background-color: var(--vscode-editor-inactiveSelectionBackground);
-                    border-left: 4px solid #d33;
-                    padding: 15px;
-                    margin-bottom: 20px;
-                    border-radius: 2px;
-                }
-                .file-info {
-                    margin-top: 20px;
-                    padding: 10px;
-                    background-color: var(--vscode-editor-lineHighlightBackground);
-                    border-radius: 4px;
-                }
-                .code {
-                    font-family: 'Courier New', monospace;
-                    background-color: var(--vscode-editor-lineHighlightBackground);
-                    padding: 4px;
-                    border-radius: 2px;
-                }
-                .json-view {
-                    font-family: 'Courier New', monospace;
-                    background-color: var(--vscode-editor-lineHighlightBackground);
-                    padding: 10px;
-                    border-radius: 4px;
-                    max-height: 400px;
-                    overflow: auto;
-                    white-space: pre-wrap;
-                    word-break: break-word;
-                }
-                .json-key { color: var(--vscode-symbolIcon-classForeground, #569cd6); }
-                .json-value { color: var(--vscode-symbolIcon-stringForeground, #ce9178); }
-                .json-string { color: var(--vscode-symbolIcon-stringForeground, #ce9178); }
-                .json-number { color: var(--vscode-symbolIcon-numberForeground, #b5cea8); }
-                .json-boolean { color: var(--vscode-symbolIcon-booleanForeground, #4e94ce); }
-                .json-null { color: var(--vscode-symbolIcon-nullForeground, #569cd6); }
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>Compiled Book File Viewer</h1>
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Compiled Book Preview</title>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        margin: 0;
+                        padding: 20px;
+                        color: var(--vscode-editor-foreground);
+                        background-color: var(--vscode-editor-background);
+                    }
+                    .container {
+                        max-width: 800px;
+                        margin: 0 auto;
+                        padding: 20px;
+                        background-color: var(--vscode-editor-background);
+                        border-radius: 4px;
+                        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                    }
+                    h1 {
+                        color: var(--vscode-editor-foreground);
+                        margin-bottom: 20px;
+                        font-size: 24px;
+                    }
+                    .info-box {
+                        background-color: var(--vscode-editor-inactiveSelectionBackground);
+                        border-left: 4px solid #d33;
+                        padding: 15px;
+                        margin-bottom: 20px;
+                        border-radius: 2px;
+                    }
+                    .file-info {
+                        margin-top: 20px;
+                        padding: 10px;
+                        background-color: var(--vscode-editor-lineHighlightBackground);
+                        border-radius: 4px;
+                    }
+                    .code {
+                        font-family: 'Courier New', monospace;
+                        background-color: var(--vscode-editor-lineHighlightBackground);
+                        padding: 4px;
+                        border-radius: 2px;
+                    }
+                    .json-view {
+                        font-family: 'Courier New', monospace;
+                        background-color: var(--vscode-editor-lineHighlightBackground);
+                        padding: 10px;
+                        border-radius: 4px;
+                        max-height: 400px;
+                        overflow: auto;
+                        white-space: pre-wrap;
+                        word-break: break-word;
+                    }
+                    .json-key { color: var(--vscode-symbolIcon-classForeground, #569cd6); }
+                    .json-value { color: var(--vscode-symbolIcon-stringForeground, #ce9178); }
+                    .json-string { color: var(--vscode-symbolIcon-stringForeground, #ce9178); }
+                    .json-number { color: var(--vscode-symbolIcon-numberForeground, #b5cea8); }
+                    .json-boolean { color: var(--vscode-symbolIcon-booleanForeground, #4e94ce); }
+                    .json-null { color: var(--vscode-symbolIcon-nullForeground, #569cd6); }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <h1>Compiled Book File Viewer</h1>
 
-                <div class="info-box">
-                    <p><strong>This is a compiled Book file (.bookc)</strong></p>
-                    <p>A .bookc file is a compiled version of a .book file containing JSON data in a compressed ZIP format.</p>
-                    <p>This file is intended for consumption by tools and should not be edited directly.</p>
+                    <div class="info-box">
+                        <p><strong>This is a compiled Book file (.bookc)</strong></p>
+                        <p>A .bookc file is a compiled version of a .book file containing JSON data in a compressed ZIP format.</p>
+                        <p>This file is intended for consumption by tools and should not be edited directly.</p>
+                    </div>
+
+                    <div class="file-info">
+                        <p><strong>File:</strong> ${fileName}</p>
+                        <p><strong>Format:</strong> JSON ${isValidJson ? '(Valid)' : '(Invalid or not JSON)'}</p>
+                    </div>
+
+                    ${isValidJson ? `
+                    <h2>File Content:</h2>
+                    <div class="json-view">${this.formatJsonForDisplay(jsonData)}</div>
+                    ` : `
+                    <h2>File Content:</h2>
+                    <div class="json-view">${fileContent}</div>
+                    `}
+
+                    <p>If you need to make changes to this file, you should edit the original <span class="code">.book</span> source file and recompile it.</p>
                 </div>
 
-                <div class="file-info">
-                    <p><strong>File:</strong> ${fileName}</p>
-                    <p><strong>Format:</strong> JSON ${isValidJson ? '(Valid)' : '(Invalid or not JSON)'}</p>
-                </div>
+                <script>
+                    // Script for webview interaction
+                    (function() {
+                        const vscode = acquireVsCodeApi();
 
-                ${isValidJson ? `
-                <h2>File Content:</h2>
-                <div class="json-view">${this.formatJsonForDisplay(jsonData)}</div>
-                ` : `
-                <h2>File Content:</h2>
-                <div class="json-view">${fileContent}</div>
-                `}
-
-                <p>If you need to make changes to this file, you should edit the original <span class="code">.book</span> source file and recompile it.</p>
-            </div>
-
-            <script>
-                // Script for webview interaction
-                (function() {
-                    const vscode = acquireVsCodeApi();
-
-                    // Report any errors to VSCode
-                    window.onerror = function(message, source, line, column, error) {
-                        vscode.postMessage({
-                            command: 'alert',
-                            text: \`Error: \${message} at \${line}:\${column}\`
-                        });
-                    };
-                })();
-            </script>
-        </body>
-        </html>
+                        // Report any errors to VSCode
+                        window.onerror = function(message, source, line, column, error) {
+                            vscode.postMessage({
+                                command: 'alert',
+                                text: \`Error: \${message} at \${line}:\${column}\`
+                            });
+                        };
+                    })();
+                </script>
+            </body>
+            </html>
         `;
     }
 
