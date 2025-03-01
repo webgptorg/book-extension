@@ -1,9 +1,17 @@
 .replit
 nonce
+book/**
+books/**
+node_modules
+replit.nix
+.env
+.gitmodules
+.whitesource
 .vscode/**
 .vscode-test/**
 src/**
 .gitignore
+.github/**
 .yarnrc
 vsc-extension-quickstart.md
 **/tsconfig.json
