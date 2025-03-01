@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
+import * as fs from 'fs';
 
 // Define our own interfaces since the VS Code API version might not include these
 interface CustomDocument {
@@ -150,11 +151,50 @@ class BookCEditorProvider implements CustomEditorProvider {
         };
         
         // Set webview HTML content
-        webviewPanel.webview.html = this.getHtmlForWebview(document.uri);
+        webviewPanel.webview.html = await this.getHtmlForWebview(document.uri, webviewPanel.webview);
+        
+        // Handle messages from the webview
+        webviewPanel.webview.onDidReceiveMessage(message => {
+            switch (message.command) {
+                case 'alert':
+                    vscode.window.showErrorMessage(message.text);
+                    return;
+            }
+        });
     }
 
-    private getHtmlForWebview(fileUri: vscode.Uri): string {
+    private async getHtmlForWebview(fileUri: vscode.Uri, _webview: vscode.Webview): Promise<string> {
         const fileName = path.basename(fileUri.fsPath);
+        
+        // Try to read and parse the .bookc file
+        let fileContent = "Unable to read file content";
+        let isValidJson = false;
+        let jsonData = {};
+        
+        try {
+            // Check if the file has a .bookc extension
+            if (fileUri.fsPath.endsWith('.bookc')) {
+                // For now, we'll just read the file as text, in the future
+                // you might want to handle ZIP format properly
+                fileContent = fs.readFileSync(fileUri.fsPath, 'utf-8');
+                
+                try {
+                    // Try to parse as JSON
+                    jsonData = JSON.parse(fileContent);
+                    isValidJson = true;
+                } catch (e) {
+                    // Type-safe error handling
+                    const jsonError = e as Error;
+                    fileContent = `Error parsing JSON: ${jsonError.message || 'Unknown error'}\n\nRaw content:\n${fileContent.substring(0, 500)}${fileContent.length > 500 ? '...' : ''}`;
+                }
+            } else {
+                fileContent = "Not a .bookc file";
+            }
+        } catch (e) {
+            // Type-safe error handling
+            const error = e as Error;
+            fileContent = `Error reading file: ${error.message || 'Unknown error'}`;
+        }
         
         return `
         <!DOCTYPE html>
@@ -203,6 +243,22 @@ class BookCEditorProvider implements CustomEditorProvider {
                     padding: 4px;
                     border-radius: 2px;
                 }
+                .json-view {
+                    font-family: 'Courier New', monospace;
+                    background-color: var(--vscode-editor-lineHighlightBackground);
+                    padding: 10px;
+                    border-radius: 4px;
+                    max-height: 400px;
+                    overflow: auto;
+                    white-space: pre-wrap;
+                    word-break: break-word;
+                }
+                .json-key { color: var(--vscode-symbolIcon-classForeground, #569cd6); }
+                .json-value { color: var(--vscode-symbolIcon-stringForeground, #ce9178); }
+                .json-string { color: var(--vscode-symbolIcon-stringForeground, #ce9178); }
+                .json-number { color: var(--vscode-symbolIcon-numberForeground, #b5cea8); }
+                .json-boolean { color: var(--vscode-symbolIcon-booleanForeground, #4e94ce); }
+                .json-null { color: var(--vscode-symbolIcon-nullForeground, #569cd6); }
             </style>
         </head>
         <body>
@@ -217,14 +273,54 @@ class BookCEditorProvider implements CustomEditorProvider {
                 
                 <div class="file-info">
                     <p><strong>File:</strong> ${fileName}</p>
-                    <p><strong>Format:</strong> JSON in ZIP</p>
+                    <p><strong>Format:</strong> JSON ${isValidJson ? '(Valid)' : '(Invalid or not JSON)'}</p>
                 </div>
+                
+                ${isValidJson ? `
+                <h2>File Content:</h2>
+                <div class="json-view">${this.formatJsonForDisplay(jsonData)}</div>
+                ` : `
+                <h2>File Content:</h2>
+                <div class="json-view">${fileContent}</div>
+                `}
                 
                 <p>If you need to make changes to this file, you should edit the original <span class="code">.book</span> source file and recompile it.</p>
             </div>
+
+            <script>
+                // Script for webview interaction
+                (function() {
+                    const vscode = acquireVsCodeApi();
+                    
+                    // Report any errors to VS Code
+                    window.onerror = function(message, source, line, column, error) {
+                        vscode.postMessage({
+                            command: 'alert',
+                            text: \`Error: \${message} at \${line}:\${column}\`
+                        });
+                    };
+                })();
+            </script>
         </body>
         </html>
         `;
+    }
+
+    /**
+     * Format JSON for syntax highlighting in the webview
+     */
+    private formatJsonForDisplay(json: any): string {
+        const formatted = JSON.stringify(json, null, 2);
+        // Simple syntax highlighting with regex
+        return formatted
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"([^"]+)":/g, '<span class="json-key">"$1"</span>:')
+            .replace(/"([^"]+)"(?!:)/g, '<span class="json-string">"$1"</span>')
+            .replace(/\b(true|false)\b/g, '<span class="json-boolean">$1</span>')
+            .replace(/\b(null)\b/g, '<span class="json-null">$1</span>')
+            .replace(/\b(\d+(\.\d+)?)\b/g, '<span class="json-number">$1</span>');
     }
 }
 
