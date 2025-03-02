@@ -207,71 +207,71 @@
             "patterns": [
                 {
                     "name": "keyword.command.section.book",
-                    "match": "^(\\s*([-*+]\\s*|\\d+[.)]\\s*))?SECTION\\s+.*$"
+                    "match": "^(\\s*([-*+]|(\\d+[.)]))\\s*)?SECTION"
                 },
                 {
                     "name": "keyword.command.expect.book",
-                    "match": "^(\\s*([-*+]\\s*|\\d+[.)]\\s*))?EXPECT\\s+.*$"
+                    "match": "^(\\s*([-*+]|(\\d+[.)]))\\s*)?EXPECT"
                 },
                 {
                     "name": "keyword.command.format.book",
-                    "match": "^(\\s*([-*+]\\s*|\\d+[.)]\\s*))?FORMAT\\s+.*$"
+                    "match": "^(\\s*([-*+]|(\\d+[.)]))\\s*)?FORMAT"
                 },
                 {
                     "name": "keyword.command.joker.book",
-                    "match": "^(\\s*([-*+]\\s*|\\d+[.)]\\s*))?JOKER\\s+.*$"
+                    "match": "^(\\s*([-*+]|(\\d+[.)]))\\s*)?JOKER"
                 },
                 {
                     "name": "keyword.command.model.book",
-                    "match": "^(\\s*([-*+]\\s*|\\d+[.)]\\s*))?MODEL\\s+.*$"
+                    "match": "^(\\s*([-*+]|(\\d+[.)]))\\s*)?MODEL"
                 },
                 {
                     "name": "keyword.command.parameter.book",
-                    "match": "^(\\s*([-*+]\\s*|\\d+[.)]\\s*))?PARAMETER\\s+.*$"
+                    "match": "^(\\s*([-*+]|(\\d+[.)]))\\s*)?PARAMETER"
                 },
                 {
                     "name": "keyword.command.postprocess.book",
-                    "match": "^(\\s*([-*+]\\s*|\\d+[.)]\\s*))?POSTPROCESS\\s+.*$"
+                    "match": "^(\\s*([-*+]|(\\d+[.)]))\\s*)?POSTPROCESS"
                 },
                 {
                     "name": "keyword.command.book_version.book",
-                    "match": "^(\\s*([-*+]\\s*|\\d+[.)]\\s*))?BOOK_VERSION\\s+.*$"
+                    "match": "^(\\s*([-*+]|(\\d+[.)]))\\s*)?BOOK_VERSION"
                 },
                 {
                     "name": "keyword.command.formfactor.book",
-                    "match": "^(\\s*([-*+]\\s*|\\d+[.)]\\s*))?FORMFACTOR\\s+.*$"
+                    "match": "^(\\s*([-*+]|(\\d+[.)]))\\s*)?FORMFACTOR"
                 },
                 {
                     "name": "keyword.command.url.book",
-                    "match": "^(\\s*([-*+]\\s*|\\d+[.)]\\s*))?URL\\s+.*$"
+                    "match": "^(\\s*([-*+]|(\\d+[.)]))\\s*)?URL"
                 },
                 {
                     "name": "keyword.command.knowledge.book",
-                    "match": "^(\\s*([-*+]\\s*|\\d+[.)]\\s*))?KNOWLEDGE\\s+.*$"
+                    "match": "^(\\s*([-*+]|(\\d+[.)]))\\s*)?KNOWLEDGE"
                 },
                 {
                     "name": "keyword.command.action.book",
-                    "match": "^(\\s*([-*+]\\s*|\\d+[.)]\\s*))?ACTION\\s+.*$"
+                    "match": "^(\\s*([-*+]|(\\d+[.)]))\\s*)?ACTION"
                 },
                 {
                     "name": "keyword.command.instrument.book",
-                    "match": "^(\\s*([-*+]\\s*|\\d+[.)]\\s*))?INSTRUMENT\\s+.*$"
+                    "match": "^(\\s*([-*+]|(\\d+[.)]))\\s*)?INSTRUMENT"
                 },
                 {
                     "name": "keyword.command.persona.book",
-                    "match": "^(\\s*([-*+]\\s*|\\d+[.)]\\s*))?PERSONA\\s+.*$"
+                    "match": "^(\\s*([-*+]|(\\d+[.)]))\\s*)?PERSONA"
                 },
                 {
                     "name": "keyword.command.foreach.book",
-                    "match": "^(\\s*([-*+]\\s*|\\d+[.)]\\s*))?FOREACH\\s+.*$"
+                    "match": "^(\\s*([-*+]|(\\d+[.)]))\\s*)?FOREACH"
                 },
                 {
                     "name": "keyword.command.boilerplate.book",
-                    "match": "^(\\s*([-*+]\\s*|\\d+[.)]\\s*))?BOILERPLATE\\s+.*$"
+                    "match": "^(\\s*([-*+]|(\\d+[.)]))\\s*)?BOILERPLATE"
                 },
                 {
                     "name": "keyword.command.example.book",
-                    "match": "^(\\s*([-*+]\\s*|\\d+[.)]\\s*))?(EXAMPLE|SAMPLE)\\s+.*$"
+                    "match": "^(\\s*([-*+]|(\\d+[.)]))\\s*)?(EXAMPLE|SAMPLE)"
                 }
             ]
         },

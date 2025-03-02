@@ -25,14 +25,14 @@ export function activate(context: vscode.ExtensionContext) {
 
 
     const outputChannel = vscode.window.createOutputChannel('Promptbook');
-    outputChannel.show(false); // Show the channel in the Output panel
+    // outputChannel.show(true);
 
 
-    outputChannel.appendLine('✨ Promptbook');
+    outputChannel.appendLine('✨😎 Promptbook');
 
 
     // Show notification to make activation more visible
-    vscode.window.showInformationMessage('Promptbook [extension](https://ptbk.io/) activated !!!');
+    // vscode.window.showInformationMessage('Promptbook [extension](https://ptbk.io/) activated');
 
 
     // Register document selectors for our custom language IDs
