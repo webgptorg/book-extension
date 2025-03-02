@@ -25,14 +25,14 @@ export function activate(context: vscode.ExtensionContext) {
 
 
     const outputChannel = vscode.window.createOutputChannel('Promptbook');
-    outputChannel.show(false); // Show the channel in the Output panel
+    // outputChannel.show(false);
 
 
     outputChannel.appendLine('✨ Promptbook');
 
 
     // Show notification to make activation more visible
-    vscode.window.showInformationMessage('Promptbook [extension](https://ptbk.io/) activated !!!');
+    // vscode.window.showInformationMessage('Promptbook [extension](https://ptbk.io/) activated');
 
 
     // Register document selectors for our custom language IDs
@@ -164,8 +164,6 @@ class BookcEditorProvider implements CustomEditorProvider {
         this.outputChannel.appendLine(`Test book-extension ptbk`);
 
         // Set webview HTML content
-        // console.log('!!! keepUnused',document,this.getHtmlForWebview)
-        // webviewPanel.webview.html = `Testing content of bookc preview !!! `;
         webviewPanel.webview.html = await this.getHtmlForWebview(document.uri, webviewPanel.webview);
 
         // Handle messages from the webview
@@ -189,8 +187,8 @@ class BookcEditorProvider implements CustomEditorProvider {
         let jsonData = {};
         let title = 'Compiled Book Preview';
 
-        // TODO: !!! Preview metadata
-        // TODO: !!! Preview tasks, personas, and knowledge
+        // TODO: Preview metadata
+        // TODO: Preview tasks, personas, and knowledge
 
         try {
             // Check if the file has a .bookc extension
@@ -314,7 +312,7 @@ class BookcEditorProvider implements CustomEditorProvider {
                 <div class="container">
                     <h1>${title}</h1>
 
-                    <p>${(jsonData as any)[0]?.title||''}</p>
+                    <p>${(jsonData as any)[0]?.title||'' /* <- TODO: Preview as markdown */}</p>
 
                     <div class="info-box">
                         <p><strong>This is a compiled Book file (.bookc)</strong></p>
