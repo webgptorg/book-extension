@@ -104,6 +104,15 @@
                             "name": "markup.underline.link.book"
                         }
                     }
+                },
+                {
+                    "name": "variable.parameter.book",
+                    "match": "\\{([^\\}]+)\\}",
+                    "captures": {
+                        "1": {
+                            "name": "variable.parameter.book"
+                        }
+                    }
                 }
             ]
         },
