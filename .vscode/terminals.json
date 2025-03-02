@@ -10,7 +10,7 @@
         },
         {
             "name": "🧪🏭 Build & Install the extension",
-            "commands": ["NODE_OPTIONS=\"\" && npm run build && code-insiders --install-extension book-extension.vsix && code --install-extension book-extension.vsix"],
+            "commands": ["NODE_OPTIONS=\"\" && npm run build && code --uninstall-extension promptbook.book-extension && code --install-extension book-extension.vsix && code ./books"],
             "execute": true,
             "onlySingle": true,
             "focus": true
