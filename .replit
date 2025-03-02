@@ -13,10 +13,10 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "VS Code Extension Tests"
+args = "VSCode Extension Tests"
 
 [[workflows.workflow]]
-name = "VS Code Extension Tests"
+name = "VSCode Extension Tests"
 author = "agent"
 
 [workflows.workflow.metadata]

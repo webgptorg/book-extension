@@ -2,7 +2,8 @@
 nonce
 book/**
 books/**
-node_modules
+# node_modules
+# <- Note: When commented out, `jszip` does not work because it is not included in the final bundle
 replit.nix
 .env
 .gitmodules
