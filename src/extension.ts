@@ -25,14 +25,14 @@ export function activate(context: vscode.ExtensionContext) {
 
 
     const outputChannel = vscode.window.createOutputChannel('Promptbook');
-    // outputChannel.show(false);
+    outputChannel.show(false); // Show the channel in the Output panel
 
 
     outputChannel.appendLine('✨ Promptbook');
 
 
     // Show notification to make activation more visible
-    // vscode.window.showInformationMessage('Promptbook [extension](https://ptbk.io/) activated');
+    vscode.window.showInformationMessage('Promptbook [extension](https://ptbk.io/) activated !!!');
 
 
     // Register document selectors for our custom language IDs
@@ -164,6 +164,8 @@ class BookcEditorProvider implements CustomEditorProvider {
         this.outputChannel.appendLine(`Test book-extension ptbk`);
 
         // Set webview HTML content
+        // console.log('!!! keepUnused',document,this.getHtmlForWebview)
+        // webviewPanel.webview.html = `Testing content of bookc preview !!! `;
         webviewPanel.webview.html = await this.getHtmlForWebview(document.uri, webviewPanel.webview);
 
         // Handle messages from the webview
@@ -187,8 +189,8 @@ class BookcEditorProvider implements CustomEditorProvider {
         let jsonData = {};
         let title = 'Compiled Book Preview';
 
-        // TODO: Preview metadata
-        // TODO: Preview tasks, personas, and knowledge
+        // TODO: !!! Preview metadata
+        // TODO: !!! Preview tasks, personas, and knowledge
 
         try {
             // Check if the file has a .bookc extension
@@ -230,7 +232,7 @@ class BookcEditorProvider implements CustomEditorProvider {
                     if(!(error instanceof Error)){
                       throw error;
                     }
-                    fileContent = `Error extracting ZIP content: ${error.message || 'Unknown error'}\n\nThis .bookc file may not be a valid.`;
+                    fileContent = `Error extracting ZIP content: ${error.message || 'Unknown error'}\n\nThis .bookc file may not be a valid ZIP archive.`;
                 }
             } else {
                 fileContent = "Not a .bookc file";
@@ -312,31 +314,26 @@ class BookcEditorProvider implements CustomEditorProvider {
                 <div class="container">
                     <h1>${title}</h1>
 
-                    <p>${(jsonData as any)[0]?.title||'' /* <- TODO: Preview as markdown */}</p>
-
                     <div class="info-box">
                         <p><strong>This is a compiled Book file (.bookc)</strong></p>
-                        ${isValid ? '' : '<p>This file has a <code>.bookc</code> extension but it <b style="color: red">does not appear to be valid</b>. Consider recompiling from source.</p>'}
-                        <p>A <code>.bookc</code> file is a compiled version of a <code>.book</code> file containing indexed PERSONAS, scraped KNOWLEDGE and resoved tasks of Promptbook system.</p>
-                        <p>This file is not intended to be editabe directly, edid correcponding <code>.book</code> and compile.</p>
-                        <p><a href="https://github.com/webgptorg/promptbook">Read more on Promptbook Github</a></p>
+                        <p>A .bookc file is a compiled version of a .book file containing JSON data in a compressed ZIP format.</p>
+                        <p>This file is intended for consumption by tools and should not be edited directly.</p>
                     </div>
 
                     <div class="file-info">
                         <p><strong>File:</strong> ${fileName}</p>
-                        <!-- TODO: <p><strong>Book Version:</strong> ...</p> -->
+                        <p><strong>Format:</strong> JSON ${isValid ? '(Valid)' : '(Invalid or not JSON)'}</p>
                     </div>
 
-
                     ${isValid ? `
-                    <h2>Raw Content:</h2>
-                    <!-- TODO: Replace with nice UI showing PERSONAS, TASKS, KNOWLEDGE,... etc. maybe used from Promptbook.studio -->
+                    <h2>File Content:</h2>
                     <div class="json-view">${this.formatJsonForDisplay(jsonData)}</div>
                     ` : `
                     <h2>File Content:</h2>
                     <div class="json-view">${fileContent}</div>
                     `}
 
+                    <p>If you need to make changes to this file, you should edit the original <span class="code">.book</span> source file and recompile it.</p>
                 </div>
 
                 <script>
@@ -385,6 +382,5 @@ export function deactivate() {
 
 
 /**
- * TODO: Link to Promptbook.studio for editing and running
  * TODO: Avoid callback hell - use fail-fast approach
  */

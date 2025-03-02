@@ -194,8 +194,68 @@
         "commands": {
             "patterns": [
                 {
+                    "name": "keyword.command.section.book",
+                    "match": "^\\s*SECTION\\s+.*$"
+                },
+                {
+                    "name": "keyword.command.expect.book",
+                    "match": "^\\s*EXPECT\\s+.*$"
+                },
+                {
+                    "name": "keyword.command.format.book",
+                    "match": "^\\s*FORMAT\\s+.*$"
+                },
+                {
+                    "name": "keyword.command.joker.book",
+                    "match": "^\\s*JOKER\\s+.*$"
+                },
+                {
+                    "name": "keyword.command.model.book",
+                    "match": "^\\s*MODEL\\s+.*$"
+                },
+                {
+                    "name": "keyword.command.parameter.book",
+                    "match": "^\\s*PARAMETER\\s+.*$"
+                },
+                {
+                    "name": "keyword.command.postprocess.book",
+                    "match": "^\\s*POSTPROCESS\\s+.*$"
+                },
+                {
+                    "name": "keyword.command.book_version.book",
+                    "match": "^\\s*BOOK_VERSION\\s+.*$"
+                },
+                {
                     "name": "keyword.command.formfactor.book",
                     "match": "^\\s*FORMFACTOR\\s+.*$"
+                },
+                {
+                    "name": "keyword.command.url.book",
+                    "match": "^\\s*URL\\s+.*$"
+                },
+                {
+                    "name": "keyword.command.knowledge.book",
+                    "match": "^\\s*KNOWLEDGE\\s+.*$"
+                },
+                {
+                    "name": "keyword.command.action.book",
+                    "match": "^\\s*ACTION\\s+.*$"
+                },
+                {
+                    "name": "keyword.command.instrument.book",
+                    "match": "^\\s*INSTRUMENT\\s+.*$"
+                },
+                {
+                    "name": "keyword.command.persona.book",
+                    "match": "^\\s*PERSONA\\s+.*$"
+                },
+                {
+                    "name": "keyword.command.foreach.book",
+                    "match": "^\\s*FOREACH\\s+.*$"
+                },
+                {
+                    "name": "keyword.command.boilerplate.book",
+                    "match": "^\\s*BOILERPLATE\\s+.*$"
                 }
             ]
         }
