@@ -1,0 +1,18 @@
+{
+    "name": "Book Color Theme",
+    "semanticHighlighting": true,
+    "semanticTokenColors": {
+        "*.dim": {
+            "foreground": "#888888",
+            "fontStyle": ""
+        }
+    },
+    "tokenColors": [
+        {
+            "scope": "source.mermaid.dim.book",
+            "settings": {
+                "foreground": "#888888"
+            }
+        }
+    ]
+}

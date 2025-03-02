@@ -114,6 +114,13 @@
                 ],
                 "priority": "default"
             }
+        ],
+        "themes": [
+            {
+                "label": "Book Theme",
+                "uiTheme": "vs",
+                "path": "./themes/book-color-theme.json"
+            }
         ]
     },
     "scripts": {
