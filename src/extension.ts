@@ -1,7 +1,7 @@
-import * as vscode from 'vscode';
-import * as path from 'path';
 import * as fs from 'fs';
 import JSZip from 'jszip';
+import * as path from 'path';
+import * as vscode from 'vscode';
 
 // Define our own interfaces since the VSCode API version might not include these
 interface CustomDocument {
