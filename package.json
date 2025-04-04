@@ -1,7 +1,7 @@
 {
     "displayName": "Promptbook .book language support",
     "name": "book-extension",
-    "version": "1.0.19",
+    "version": "1.0.20",
     "publisher": "Promptbook",
     "description": "",
     "author": "Pavol Hejný <pavol@ptbk.io> (https://www.pavolhejny.com/)",
