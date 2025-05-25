@@ -1,7 +1,7 @@
 {
     "displayName": "Promptbook .book language support",
     "name": "book-extension",
-    "version": "1.0.53",
+    "version": "1.0.54",
     "publisher": "Promptbook",
     "description": "",
     "author": "Pavol Hejný <pavol@ptbk.io> (https://www.pavolhejny.com/)",
@@ -13,7 +13,7 @@
     "engines": {
         "vscode": "^1.77.0"
     },
- "license": "BUSL-1.1",
+    "license": "BUSL-1.1",
     "icon": "./icons/book-icon.png",
     "galleryBanner": {
         "color": "#007ACC",
